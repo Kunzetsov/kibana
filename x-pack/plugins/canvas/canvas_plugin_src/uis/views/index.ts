@@ -32,7 +32,7 @@ import { shape } from './shape';
 import { table } from './table';
 // @ts-expect-error untyped local
 import { timefilterControl } from './timefilterControl';
-
+import { tagcloud } from './tagcloud';
 import { SetupInitializer } from '../../plugin';
 
 export const viewSpecs = [
@@ -49,6 +49,7 @@ export const viewSpecs = [
   shape,
   table,
   timefilterControl,
+  tagcloud,
 ];
 
 export const viewInitializers = [metricInitializer];

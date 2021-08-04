@@ -1173,4 +1173,30 @@ export const ViewStrings = {
           "Apply the selected group name to an element's filters function to target this filter",
       }),
   },
+  Tagcloud: {
+    getDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloudTitle', {
+        defaultMessage: 'Tag Cloud',
+      }),
+    getColumnDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleDisplayName', {
+        defaultMessage: 'Scale',
+      }),
+    getColumnHelp: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleHelp', {
+        defaultMessage: 'Scale to determine font size of a word',
+      }),
+    getScaleLinear: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleLinearLabel', {
+        defaultMessage: 'Linear',
+      }),
+    getScaleLog: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleLogLabel', {
+        defaultMessage: 'Log',
+      }),
+    getScaleSquareRoot: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleSquareRootLabel', {
+        defaultMessage: 'Square root',
+      }),
+  },
 };
