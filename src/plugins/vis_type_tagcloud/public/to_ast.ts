@@ -6,7 +6,6 @@
  * Side Public License, v 1.
  */
 
-import { PaletteOutput } from 'src/plugins/charts/common';
 import {
   EsaggsExpressionFunctionDefinition,
   IndexPatternLoadExpressionFunctionDefinition,

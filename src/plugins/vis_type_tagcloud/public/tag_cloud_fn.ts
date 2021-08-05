@@ -16,7 +16,7 @@ import { TagCloudVisParams, TagCloudVisConfig } from './types';
 const name = 'tagcloud';
 
 interface Arguments extends TagCloudVisConfig {
-  palette: PaletteOutput<Record<string, unknown>>;
+  palette: PaletteOutput;
 }
 
 export interface TagCloudVisRenderValue {

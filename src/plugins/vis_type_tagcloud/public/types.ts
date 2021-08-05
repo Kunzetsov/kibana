@@ -22,7 +22,7 @@ export interface TagCloudVisConfig extends TagCloudCommonParams {
 }
 
 export interface TagCloudVisParams extends TagCloudCommonParams {
-  palette: PaletteOutput<Record<string, unknown>>;
+  palette: PaletteOutput;
   metric: ExpressionValueVisDimension;
   bucket?: ExpressionValueVisDimension;
 }

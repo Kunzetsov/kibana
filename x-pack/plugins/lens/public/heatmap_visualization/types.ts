@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import type { PaletteOutput } from '../../../../../src/plugins/charts/common';
+import type { CustomPaletteState, PaletteOutput } from '../../../../../src/plugins/charts/common';
 import type { LensBrushEvent, LensFilterEvent } from '../types';
 import type { LensMultiTable, FormatFactory, CustomPaletteParams } from '../../common';
 import type { HeatmapGridConfigResult, HeatmapLegendConfigResult } from '../../common/expressions';
@@ -35,7 +35,7 @@ export type HeatmapVisualizationState = HeatmapLayerState & {
 export type HeatmapExpressionArgs = SharedHeatmapLayerState & {
   title?: string;
   description?: string;
-  palette: PaletteOutput;
+  palette: PaletteOutput<CustomPaletteState>;
 };
 
 export interface HeatmapRender {

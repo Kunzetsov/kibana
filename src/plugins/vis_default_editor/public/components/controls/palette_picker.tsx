@@ -13,10 +13,10 @@ import { EuiFormRow } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
 
 export interface PalettePickerProps<ParamName extends string> {
-  activePalette?: PaletteOutput<Record<string, unknown>>;
+  activePalette?: PaletteOutput;
   palettes: PaletteRegistry;
   paramName: ParamName;
-  setPalette: (paramName: ParamName, value: PaletteOutput<Record<string, unknown>>) => void;
+  setPalette: (paramName: ParamName, value: PaletteOutput) => void;
 }
 
 export function PalettePicker<ParamName extends string>({
