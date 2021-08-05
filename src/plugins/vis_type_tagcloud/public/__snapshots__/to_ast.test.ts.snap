@@ -85,7 +85,16 @@ Object {
           "single",
         ],
         "palette": Array [
-          "default",
+          Object {
+            "chain": Array [
+              Object {
+                "arguments": Object {},
+                "function": "palette",
+                "type": "function",
+              },
+            ],
+            "type": "expression",
+          },
         ],
         "scale": Array [
           "linear",
@@ -187,7 +196,16 @@ Object {
           "single",
         ],
         "palette": Array [
-          "default",
+          Object {
+            "chain": Array [
+              Object {
+                "arguments": Object {},
+                "function": "palette",
+                "type": "function",
+              },
+            ],
+            "type": "expression",
+          },
         ],
         "scale": Array [
           "linear",
@@ -273,6 +291,18 @@ Object {
                   ],
                 },
                 "function": "visdimension",
+                "type": "function",
+              },
+            ],
+            "type": "expression",
+          },
+        ],
+        "palette": Array [
+          Object {
+            "chain": Array [
+              Object {
+                "arguments": Object {},
+                "function": "palette",
                 "type": "function",
               },
             ],
