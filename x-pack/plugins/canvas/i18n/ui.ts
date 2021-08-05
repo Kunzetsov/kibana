@@ -314,6 +314,16 @@ export const ArgumentStrings = {
         defaultMessage: 'A true/false toggle switch',
       }),
   },
+  VisDimension: {
+    getDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.arguments.visDimensionTitle', {
+        defaultMessage: 'Column',
+      }),
+    getHelp: () =>
+      i18n.translate('xpack.canvas.uis.arguments.visDimensionLabel', {
+        defaultMessage: 'Generates visConfig dimension object',
+      }),
+  },
 };
 
 export const DataSourceStrings = {
@@ -1242,13 +1252,13 @@ export const ViewStrings = {
       i18n.translate('xpack.canvas.uis.views.tagcloud.args.showLabelHelp', {
         defaultMessage: 'Show label of the chart',
       }),
-    getPaletteColumnDisplayName: () =>
-      i18n.translate('xpack.canvas.uis.views.tagcloud.args.paletteDisplayName', {
-        defaultMessage: 'Palette',
+    getMetricColumnDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.metricDisplayName', {
+        defaultMessage: 'Metric',
       }),
-    getPaletteColumnHelp: () =>
-      i18n.translate('xpack.canvas.uis.views.tagcloud.args.paletteHelp', {
-        defaultMessage: 'Defines the chart palette name',
+    getMetricColumnColumnHelp: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.metricHelp', {
+        defaultMessage: 'Metric dimension configuration',
       }),
   },
 };

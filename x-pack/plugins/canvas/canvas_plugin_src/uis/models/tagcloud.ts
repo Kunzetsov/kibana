@@ -5,14 +5,17 @@
  * 2.0.
  */
 
+import { get } from 'lodash';
+
 import { ViewStrings } from '../../../i18n';
+import { getState, getValue } from '../../../public/lib/resolved_arg';
 
 const { Tagcloud: strings } = ViewStrings;
 
 export const tagcloud = () => ({
   name: 'tagcloud',
   displayName: strings.getDisplayName(),
-  modelArgs: [],
+  modelArgs: ['by'],
   args: [
     {
       name: 'scale',
@@ -67,5 +70,25 @@ export const tagcloud = () => ({
       name: 'palette',
       argType: 'palette',
     },
+    {
+      name: 'metric',
+      displayName: 'Metric',
+      help: 'Metric help',
+      argType: 'vis_dimension',
+      confirm: 'Update',
+    },
+    {
+      name: 'bucket',
+      displayName: 'Bucket',
+      help: 'Bucket help',
+      argType: 'vis_dimension',
+      confirm: 'Update',
+    },
   ],
+  resolve({ context }: any) {
+    if (getState(context) !== 'ready') {
+      return { columns: [] };
+    }
+    return { columns: get(getValue(context), 'columns', []) };
+  },
 });
