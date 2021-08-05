@@ -7,6 +7,7 @@
  */
 
 import { i18n } from '@kbn/i18n';
+import { PaletteOutput } from 'src/plugins/charts/public';
 
 import { ExpressionFunctionDefinition, Datatable, Render } from '../../expressions/public';
 import { prepareLogTable, Dimension } from '../../visualizations/public';
@@ -15,7 +16,7 @@ import { TagCloudVisParams, TagCloudVisConfig } from './types';
 const name = 'tagcloud';
 
 interface Arguments extends TagCloudVisConfig {
-  palette: string;
+  palette: PaletteOutput<Record<string, unknown>>;
 }
 
 export interface TagCloudVisRenderValue {
@@ -72,11 +73,11 @@ export const createTagCloudFn = (): TagcloudExpressionFunctionDefinition => ({
       help: '',
     },
     palette: {
-      types: ['string'],
+      types: ['palette'],
       help: i18n.translate('visTypeTagCloud.function.paletteHelpText', {
         defaultMessage: 'Defines the chart palette name',
       }),
-      default: 'default',
+      default: '{palette}',
     },
     metric: {
       types: ['vis_dimension'],
@@ -103,10 +104,7 @@ export const createTagCloudFn = (): TagcloudExpressionFunctionDefinition => ({
       ...(args.bucket && {
         bucket: args.bucket,
       }),
-      palette: {
-        type: 'palette',
-        name: args.palette,
-      },
+      palette: args.palette,
     };
 
     if (handlers?.inspectorAdapters?.tables) {

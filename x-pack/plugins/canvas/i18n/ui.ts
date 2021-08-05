@@ -1178,11 +1178,11 @@ export const ViewStrings = {
       i18n.translate('xpack.canvas.uis.views.tagcloudTitle', {
         defaultMessage: 'Tag Cloud',
       }),
-    getColumnDisplayName: () =>
+    getScaleColumnDisplayName: () =>
       i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleDisplayName', {
         defaultMessage: 'Scale',
       }),
-    getColumnHelp: () =>
+    getScaleColumnHelp: () =>
       i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleHelp', {
         defaultMessage: 'Scale to determine font size of a word',
       }),
@@ -1197,6 +1197,58 @@ export const ViewStrings = {
     getScaleSquareRoot: () =>
       i18n.translate('xpack.canvas.uis.views.tagcloud.args.scaleSquareRootLabel', {
         defaultMessage: 'Square root',
+      }),
+    getOrientationColumnDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.orientationDisplayName', {
+        defaultMessage: 'Orientation',
+      }),
+    getOrientationColumnHelp: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.orientationHelp', {
+        defaultMessage: 'Orientation of words inside tagcloud',
+      }),
+    getOrientationSingle: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.orientationSingleLabel', {
+        defaultMessage: 'Single',
+      }),
+    getOrientationRightAngled: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.orientationRightAngledLabel', {
+        defaultMessage: 'Right angled',
+      }),
+    getOrientationMultiple: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.orientationMultipleLabel', {
+        defaultMessage: 'Multiple',
+      }),
+    getMinFontHeightColumnDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.minFontHeightDisplayName', {
+        defaultMessage: 'Minimum font height',
+      }),
+    getMinFontHeightColumnHelp: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.minFontHeightHelp', {
+        defaultMessage: 'Minimum height of the element font',
+      }),
+    getMaxFontHeightColumnDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.maxFontHeightDisplayName', {
+        defaultMessage: 'Maximum font height',
+      }),
+    getMaxFontHeightColumnHelp: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.maxFontHeightHelp', {
+        defaultMessage: 'Maximum height of the element font',
+      }),
+    getShowLabelColumnDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.showLabelDisplayName', {
+        defaultMessage: 'Show label',
+      }),
+    getShowLabelColumnHelp: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.showLabelHelp', {
+        defaultMessage: 'Show label of the chart',
+      }),
+    getPaletteColumnDisplayName: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.paletteDisplayName', {
+        defaultMessage: 'Palette',
+      }),
+    getPaletteColumnHelp: () =>
+      i18n.translate('xpack.canvas.uis.views.tagcloud.args.paletteHelp', {
+        defaultMessage: 'Defines the chart palette name',
       }),
   },
 };

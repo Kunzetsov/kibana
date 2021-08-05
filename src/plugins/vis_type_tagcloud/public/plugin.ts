@@ -52,11 +52,9 @@ export class TagCloudPlugin implements Plugin<void, void> {
     };
     expressions.registerFunction(createTagCloudFn);
     expressions.registerRenderer(getTagCloudVisRenderer(visualizationDependencies));
-    visualizations.createBaseVisualization(
-      getTagCloudVisTypeDefinition({
-        palettes: charts.palettes,
-      })
-    );
+    getTagCloudVisTypeDefinition({
+      palettes: charts.palettes,
+    }).then((definition) => visualizations.createBaseVisualization(definition));
   }
 
   public start(core: CoreStart, { data }: TagCloudVisPluginStartDependencies) {

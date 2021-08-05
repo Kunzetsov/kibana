@@ -16,8 +16,8 @@ export const tagcloud = () => ({
   args: [
     {
       name: 'scale',
-      displayName: strings.getColumnDisplayName(),
-      help: strings.getColumnHelp(),
+      displayName: strings.getScaleColumnDisplayName(),
+      help: strings.getScaleColumnHelp(),
       argType: 'select',
       default: 'linear',
       options: {
@@ -27,6 +27,45 @@ export const tagcloud = () => ({
           { value: 'square root', name: strings.getScaleSquareRoot() },
         ],
       },
+    },
+    {
+      name: 'orientation',
+      displayName: strings.getOrientationColumnDisplayName(),
+      help: strings.getOrientationColumnHelp(),
+      argType: 'select',
+      default: 'single',
+      options: {
+        choices: [
+          { value: 'single', name: strings.getOrientationSingle() },
+          { value: 'right angled', name: strings.getOrientationRightAngled() },
+          { value: 'multiple', name: strings.getOrientationMultiple() },
+        ],
+      },
+    },
+    {
+      name: 'minFontSize',
+      displayName: strings.getMinFontHeightColumnDisplayName(),
+      help: strings.getMinFontHeightColumnHelp(),
+      argType: 'number',
+      default: 18,
+    },
+    {
+      name: 'maxFontSize',
+      displayName: strings.getMaxFontHeightColumnDisplayName(),
+      help: strings.getMaxFontHeightColumnHelp(),
+      argType: 'number',
+      default: 72,
+    },
+    {
+      name: 'showLabel',
+      displayName: strings.getShowLabelColumnDisplayName(),
+      help: strings.getShowLabelColumnHelp(),
+      argType: 'toggle',
+      default: true,
+    },
+    {
+      name: 'palette',
+      argType: 'palette',
     },
   ],
 });
