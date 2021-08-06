@@ -15,7 +15,7 @@ const { Tagcloud: strings } = ViewStrings;
 export const tagcloud = () => ({
   name: 'tagcloud',
   displayName: strings.getDisplayName(),
-  modelArgs: ['by'],
+  modelArgs: ['by', 'fn'],
   args: [
     {
       name: 'scale',

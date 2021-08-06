@@ -20,7 +20,7 @@ const SelectArgInput = ({
   argId,
   choises: dynamicChoises,
 }) => {
-  const existChoises = typeInstance.options.choices ?? dynamicChoises ?? [];
+  const existChoises = typeInstance.options.choices ?? dynamicChoises?.[typeInstance.name] ?? [];
   const choices = existChoises.map(({ value, name }) => ({ value, text: name }));
   const handleChange = (ev) => {
     // Get the value from the choices passed in since it could be a number or

@@ -22,6 +22,13 @@ export const ply = () => ({
       help: 'By help',
       argType: 'select',
     },
+    {
+      name: 'fn',
+      displayName: 'Fn',
+      help: 'Fn help',
+      argType: 'datacolumn',
+      multi: true,
+    },
   ],
   resolve({ context }: any) {
     if (getState(context) !== 'ready') {
@@ -29,7 +36,9 @@ export const ply = () => ({
     }
     const columns = get(getValue(context), 'columns', []);
     return {
-      choises: columns.map(({ id, name }: DatatableColumn) => ({ value: id, name })),
+      choises: {
+        by: columns.map(({ id, name }: DatatableColumn) => ({ value: id, name })),
+      },
       columns,
     };
   },
