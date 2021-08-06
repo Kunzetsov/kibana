@@ -23,7 +23,7 @@ const VisDimensionArgInput = ({
   // @todo define types
   [key: string]: any;
 }) => {
-  const [value, setValue] = useState(argValue);
+  const [_, setValue] = useState(argValue);
   const confirm = typeInstance?.options?.confirm;
 
   useEffect(() => {

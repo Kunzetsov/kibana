@@ -26,7 +26,7 @@ export const ply = () => ({
       name: 'fn',
       displayName: 'Fn',
       help: 'Fn help',
-      argType: 'datacolumn',
+      argType: 'fn',
       multi: true,
     },
   ],
