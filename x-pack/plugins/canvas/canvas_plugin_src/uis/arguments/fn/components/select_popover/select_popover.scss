@@ -1,0 +1,29 @@
+.canvasSelectPopover__add {
+  padding: $euiSizeM;
+  text-align: left;
+  width: 100%;
+
+  &:not(:last-child) {
+    border-bottom: $euiBorderThin;
+  }
+
+  &:hover {
+    background-color: $euiColorLightestShade;
+
+    label {
+      color: $euiColorDarkestShade;
+    }
+  }
+}
+
+.canvasSelectPopover__addOption {
+  margin-right: -$euiSizeS;
+}
+
+.canvasSelectPopover__addPopover {
+  width: 100%;
+}
+
+.canvasSelectPopover__anchor {
+  width: 100%;
+}

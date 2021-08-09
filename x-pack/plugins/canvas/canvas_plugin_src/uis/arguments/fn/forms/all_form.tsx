@@ -11,7 +11,7 @@ import { DatatableColumn } from 'src/plugins/expressions';
 import { mathFunctions } from '../config';
 import { formHoc } from '../components';
 
-export const MathFormComponent = ({
+export const AllFormComponent = ({
   argValue,
   typeInstance,
   onValueChange,
@@ -27,7 +27,7 @@ export const MathFormComponent = ({
   ];
 
   return (
-    <EuiFlexGroup gutterSize="s" id={argId} direction="column">
+    <EuiFlexGroup gutterSize="s" id={argId}>
       <EuiFlexItem grow={false}>
         <EuiSelect
           compressed
@@ -48,4 +48,4 @@ export const MathFormComponent = ({
   );
 };
 
-export const MathForm = formHoc(MathFormComponent);
+export const AllForm = formHoc(AllFormComponent);

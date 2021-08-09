@@ -6,21 +6,28 @@
  */
 
 import { Expression } from '../config';
-import { formHoc } from './form_hoc';
-import { MathForm as MathFormComponent } from './math_form';
-
-export const MathForm = formHoc(MathFormComponent);
+import { MathForm } from './math_form';
+import { GetCellForm } from './get_cell_form';
+import { AsForm } from './as_form';
+import { EqForm } from './eq_form';
+import { GtForm } from './gt_form';
+import { GteForm } from './gte_form';
+import { LtForm } from './lt_form';
+import { LteForm } from './lte_form';
+import { NeqForm } from './neq_form';
+import { AnyForm } from './any_form';
+import { AllForm } from './all_form';
 
 export const forms = {
   [Expression.math]: MathForm,
-  [Expression.getCell]: MathForm,
-  [Expression.all]: MathForm,
-  [Expression.any]: MathForm,
-  [Expression.eq]: MathForm,
-  [Expression.gte]: MathForm,
-  [Expression.gt]: MathForm,
-  [Expression.lte]: MathForm,
-  [Expression.lt]: MathForm,
-  [Expression.neq]: MathForm,
-  [Expression.as]: MathForm,
+  [Expression.getCell]: GetCellForm,
+  [Expression.all]: AllForm,
+  [Expression.any]: AnyForm,
+  [Expression.eq]: EqForm,
+  [Expression.gte]: GteForm,
+  [Expression.gt]: GtForm,
+  [Expression.lte]: LteForm,
+  [Expression.lt]: LtForm,
+  [Expression.neq]: NeqForm,
+  [Expression.as]: AsForm,
 };

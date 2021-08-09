@@ -8,10 +8,11 @@
 import { EuiFlexGroup, EuiFlexItem, EuiSelect } from '@elastic/eui';
 import React, { useState, useEffect, useCallback } from 'react';
 import { DatatableColumn } from 'src/plugins/expressions';
-import { mathFunctions } from '../config';
+import { simpleComparisonExpressions, expressions } from '../config';
 import { formHoc } from '../components';
+import { forms } from './';
 
-export const MathFormComponent = ({
+export const AnyFormComponent = ({
   argValue,
   typeInstance,
   onValueChange,
@@ -27,11 +28,11 @@ export const MathFormComponent = ({
   ];
 
   return (
-    <EuiFlexGroup gutterSize="s" id={argId} direction="column">
+    <EuiFlexGroup gutterSize="s" id={argId}>
       <EuiFlexItem grow={false}>
         <EuiSelect
           compressed
-          options={mathFunctions}
+          options={[]}
           value={''}
           // onChange={(ev) => console.log(ev)}
         />
@@ -48,4 +49,4 @@ export const MathFormComponent = ({
   );
 };
 
-export const MathForm = formHoc(MathFormComponent);
+export const AnyForm = formHoc(AnyFormComponent);

@@ -5,13 +5,12 @@
  * 2.0.
  */
 
-import { EuiFlexGroup, EuiFlexItem, EuiSelect } from '@elastic/eui';
+import { EuiFieldText, EuiFlexGroup, EuiFlexItem, EuiSelect } from '@elastic/eui';
 import React, { useState, useEffect, useCallback } from 'react';
 import { DatatableColumn } from 'src/plugins/expressions';
-import { mathFunctions } from '../config';
 import { formHoc } from '../components';
 
-export const MathFormComponent = ({
+export const GetCellFormComponent = ({
   argValue,
   typeInstance,
   onValueChange,
@@ -25,17 +24,8 @@ export const MathFormComponent = ({
     { value: '', text: 'select column', disabled: true },
     ...columns.map((column: DatatableColumn) => ({ value: column.name, text: column.name })),
   ];
-
   return (
     <EuiFlexGroup gutterSize="s" id={argId} direction="column">
-      <EuiFlexItem grow={false}>
-        <EuiSelect
-          compressed
-          options={mathFunctions}
-          value={''}
-          // onChange={(ev) => console.log(ev)}
-        />
-      </EuiFlexItem>
       <EuiFlexItem>
         <EuiSelect
           compressed
@@ -48,4 +38,4 @@ export const MathFormComponent = ({
   );
 };
 
-export const MathForm = formHoc(MathFormComponent);
+export const GetCellForm = formHoc(GetCellFormComponent);

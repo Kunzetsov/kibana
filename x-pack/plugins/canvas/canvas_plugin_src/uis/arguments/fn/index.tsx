@@ -5,26 +5,29 @@
  * 2.0.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, MouseEventHandler } from 'react';
 import {
   DropResult,
+  EuiButton,
   EuiDragDropContext,
   euiDragDropReorder,
   EuiDraggable,
   EuiDroppable,
+  EuiFlexGrid,
   EuiFlexGroup,
   EuiFlexItem,
+  EuiFormRow,
   EuiSelect,
   htmlIdGenerator,
 } from '@elastic/eui';
 import { DatatableColumn, ExpressionAstExpression } from 'src/plugins/expressions';
 import { templateFromReactComponent } from '../../../../public/lib/template_from_react_component';
 import { ArgumentStrings } from '../../../../i18n';
-import { ArgAddPopover } from '../../../../public/components/arg_add_popover';
 // @ts-expect-error untyped component
 import { SidebarSectionTitle } from '../../../../public/components/sidebar/sidebar_section_title';
 import { Expression, expressions } from './config';
 import { forms } from './forms';
+import { SelectPopover } from './components';
 
 const makeId = htmlIdGenerator();
 
@@ -47,11 +50,8 @@ const FnArgInput = (props: {
     setSelectedExpressions(selectedExpressions.filter((expr, index) => index !== exprIndex));
 
   const options = expressions.map((expr) => ({
-    arg: {
-      help: expr.help,
-      displayName: expr.name,
-      name: expr.name,
-    },
+    help: expr.help,
+    displayName: expr.name,
     onValueAdd: onValueAdd(expr.expression),
   }));
 
@@ -59,11 +59,12 @@ const FnArgInput = (props: {
     const FormComponent = forms[expr.expression] ?? (() => {});
     const expression = expressions.filter((e) => e.expression === expr.expression)[0];
     return (
-      <EuiDraggable spacing="s" key={expression.expression} index={index} draggableId={expr.id}>
+      <EuiDraggable key={expression.expression} index={index} draggableId={expr.id}>
         <FormComponent {...props} expr={expression} onValueRemove={onValueRemove(index)} />
       </EuiDraggable>
     );
   });
+
   const onDragEnd = ({ source, destination }: DropResult) => {
     if (source && destination) {
       const items = euiDragDropReorder(selectedExpressions, source.index, destination.index);
@@ -72,25 +73,35 @@ const FnArgInput = (props: {
     }
   };
 
+  const addFnButton = (handleClick: MouseEventHandler<HTMLButtonElement>) => (
+    <EuiButton
+      // isSelected={toggle2On}
+      // fill={toggle2On}
+      // iconType={toggle2On ? 'starFilledSpace' : 'starPlusEmpty'}
+      iconType={'plusInCircle'}
+      onClick={handleClick}
+      fullWidth
+    >
+      Expression
+    </EuiButton>
+  );
+
   return (
     <>
-      <SidebarSectionTitle title={''}>
-        {options.length === 0 ? null : <ArgAddPopover options={options} />}
-      </SidebarSectionTitle>
-      <EuiFlexGroup
-        className="canvasSidebar__panelTitle"
-        gutterSize="xs"
-        alignItems="center"
-        justifyContent="spaceBetween"
-      >
-        <EuiFlexItem>
+      <EuiFlexGrid columns={1} direction="column" gutterSize="s">
+        <EuiFlexItem grow={false}>
+          <SelectPopover options={options} button={addFnButton} />
+        </EuiFlexItem>
+
+        {/* <SidebarSectionTitle title={''}>
+          {options.length === 0 ? null : <ArgAddPopover options={options} />}
+        </SidebarSectionTitle> */}
+        <EuiFlexItem grow={false}>
           <EuiDragDropContext onDragEnd={onDragEnd}>
-            <EuiDroppable droppableId={makeId()} spacing="m" grow={false}>
-              {expressionForms}
-            </EuiDroppable>
+            <EuiDroppable droppableId={makeId()}>{expressionForms}</EuiDroppable>
           </EuiDragDropContext>
         </EuiFlexItem>
-      </EuiFlexGroup>
+      </EuiFlexGrid>
     </>
   );
 };
@@ -99,5 +110,6 @@ export const fn = () => ({
   name: 'fn',
   displayName: 'Fn',
   help: 'Fn help',
+  // template: templateFromReactComponent(FnArgInput),
   simpleTemplate: templateFromReactComponent(FnArgInput),
 });

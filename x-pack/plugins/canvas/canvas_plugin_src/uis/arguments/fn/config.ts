@@ -46,3 +46,12 @@ export const mathFunctions = [
   { text: strings.getOptionSum(), value: 'sum' },
   { text: strings.getOptionUnique(), value: 'unique' },
 ];
+
+export const simpleComparisonExpressions = [
+  Expression.eq,
+  Expression.neq,
+  Expression.lt,
+  Expression.lte,
+  Expression.gt,
+  Expression.gte,
+];
