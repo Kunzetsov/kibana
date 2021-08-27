@@ -7,7 +7,6 @@
  */
 
 import { AccessorFn, Accessor } from '@elastic/charts';
-import { BUCKET_TYPES } from '../../../../data/public';
 import { FakeParams } from '../../../../visualizations/public';
 import { Aspect } from '../types';
 
@@ -27,24 +26,16 @@ const getFieldName = (fieldName: string, index?: number) => {
   return `${fieldName}${indexStr}`;
 };
 
-export const isRangeAggType = (type: string | null) =>
-  type === BUCKET_TYPES.DATE_RANGE || type === BUCKET_TYPES.RANGE || type === BUCKET_TYPES.IP_RANGE;
-
 /**
  * Returns accessor function for complex accessor types
  * @param aspect
- * @param isComplex - forces to be functional/complex accessor
  */
-export const getComplexAccessor = (fieldName: string, isComplex: boolean = false) => (
+export const getComplexAccessor = (fieldName: string) => (
   aspect: Aspect,
   index?: number
 ): Accessor | AccessorFn | undefined => {
   if (!aspect.accessor) {
     return;
-  }
-
-  if (!((isComplex || isRangeAggType(aspect.aggType)) && aspect.formatter)) {
-    return aspect.accessor;
   }
 
   const formatter = aspect.formatter;
@@ -54,8 +45,7 @@ export const getComplexAccessor = (fieldName: string, isComplex: boolean = false
     if (v === undefined) {
       return;
     }
-    const f = formatter(v);
-    return f;
+    return formatter?.(v) ?? v;
   };
 
   fn.fieldName = getFieldName(fieldName, index);

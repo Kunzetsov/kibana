@@ -33,7 +33,8 @@ export function getAxis<S extends XScaleType | YScaleType>(
   { categoryLines, valueAxis }: Grid,
   { params, format, formatter, title: fallbackTitle = '', aggType }: Aspect,
   seriesParams: SeriesParam[],
-  isDateHistogram = false
+  isDateHistogram = false,
+  shouldFormat: boolean = true
 ): AxisConfig<S> {
   const isCategoryAxis = type === AxisType.Category;
   // Hide unassigned axis, not supported in elastic charts
@@ -50,9 +51,8 @@ export function getAxis<S extends XScaleType | YScaleType>(
     : {
         show: valueAxis === axis.id,
       };
-  // Date range formatter applied on xAccessor
-  const tickFormatter =
-    aggType === BUCKET_TYPES.DATE_RANGE || aggType === BUCKET_TYPES.RANGE ? identity : formatter;
+
+  const tickFormatter = shouldFormat && formatter ? formatter : undefined;
   const ticks: TickOptions = {
     formatter: tickFormatter,
     labelFormatter: getLabelFormatter(labels.truncate, tickFormatter),

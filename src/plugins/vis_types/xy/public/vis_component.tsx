@@ -295,7 +295,6 @@ const VisComponent = (props: VisComponentProps) => {
     ]
   );
 
-  // @TODO: move this logic, related to aggregation types, to the other processing function, out of `xy_vis`.
   const xAccessor = getXAccessor(config.aspects.x);
 
   const splitSeriesAccessors = useMemo(
@@ -306,10 +305,10 @@ const VisComponent = (props: VisComponentProps) => {
     [config.aspects.series]
   );
   const splitChartColumnAccessor = config.aspects.splitColumn
-    ? getComplexAccessor(COMPLEX_SPLIT_ACCESSOR, true)(config.aspects.splitColumn)
+    ? getComplexAccessor(COMPLEX_SPLIT_ACCESSOR)(config.aspects.splitColumn)
     : undefined;
   const splitChartRowAccessor = config.aspects.splitRow
-    ? getComplexAccessor(COMPLEX_SPLIT_ACCESSOR, true)(config.aspects.splitRow)
+    ? getComplexAccessor(COMPLEX_SPLIT_ACCESSOR)(config.aspects.splitRow)
     : undefined;
   // -------------------------------------------------------------------------------------------------------
 

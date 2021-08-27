@@ -19,7 +19,7 @@ import {
 import { Aspects } from '../types';
 
 import './_detailed_tooltip.scss';
-import { COMPLEX_SPLIT_ACCESSOR, isRangeAggType } from '../utils/accessors';
+import { COMPLEX_SPLIT_ACCESSOR } from '../utils/accessors';
 
 interface TooltipData {
   label: string;
@@ -34,10 +34,12 @@ export const getTooltipData = (
   const data: TooltipData[] = [];
 
   if (header) {
-    const xFormatter = isRangeAggType(aspects.x.aggType) ? null : aspects.x.formatter;
+    // const xFormatter = aspects.x?.formatter ?? null;
+
     data.push({
       label: aspects.x.title,
-      value: xFormatter ? xFormatter(header.value) : `${header.value}`,
+      // value: xFormatter ? xFormatter(header.value) : `${header.value}`,
+      value: `${header.value}`,
     });
   }
 

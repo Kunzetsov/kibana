@@ -7,14 +7,13 @@
  */
 
 import { ScaleContinuousType } from '@elastic/charts';
-
 import { Datatable } from '../../../../expressions/public';
-import { BUCKET_TYPES } from '../../../../data/public';
-import { DateHistogramParams } from '../../../../visualizations/public';
 
 import {
   Aspect,
   AxisConfig,
+  AxisMode,
+  ChartMode,
   SeriesParam,
   VisConfig,
   VisParams,
@@ -42,23 +41,26 @@ export function getConfig(table: Datatable, params: VisParams): VisConfig {
     fillOpacity,
   } = params;
   const aspects = getAspects(table.columns, params.dimensions);
+  const yAxes = params.valueAxes.map((a) =>
+    // uses first y aspect in array for formatting axis
+    getAxis<YScaleType>(a, params.grid, aspects.y[0], params.seriesParams)
+  );
+
+  const enableHistogramMode = shouldEnableHistogramMode(params.seriesParams, aspects.y, yAxes);
+
+  // @TODO: rewrite to constants later while refactoring
+  const isTimeChart = ['date', 'date_range'].includes(aspects.x.format?.id ?? '');
+
   const xAxis = getAxis<XScaleType>(
     params.categoryAxes[0],
     params.grid,
     aspects.x,
     params.seriesParams,
-    params.dimensions.x?.aggType === BUCKET_TYPES.DATE_HISTOGRAM
+    enableHistogramMode && isTimeChart,
+    false
   );
+
   const tooltip = getTooltip(aspects, params);
-  const yAxes = params.valueAxes.map((a) =>
-    // uses first y aspect in array for formatting axis
-    getAxis<YScaleType>(a, params.grid, aspects.y[0], params.seriesParams)
-  );
-  const enableHistogramMode =
-    (params.dimensions.x?.aggType === BUCKET_TYPES.DATE_HISTOGRAM ||
-      params.dimensions.x?.aggType === BUCKET_TYPES.HISTOGRAM) &&
-    shouldEnableHistogramMode(params.seriesParams, aspects.y, yAxes);
-  const isTimeChart = (aspects.x.params as DateHistogramParams).date ?? false;
 
   return {
     // NOTE: downscale ratio to match current vislib implementation
@@ -114,6 +116,6 @@ const shouldEnableHistogramMode = (
   return bars.every(({ valueAxis: groupId, mode }) => {
     const yAxisScale = yAxes.find(({ groupId: axisGroupId }) => axisGroupId === groupId)?.scale;
 
-    return mode === 'stacked' || yAxisScale?.mode === 'percentage';
+    return mode === ChartMode.Stacked || yAxisScale?.mode === AxisMode.Percentage;
   });
 };
