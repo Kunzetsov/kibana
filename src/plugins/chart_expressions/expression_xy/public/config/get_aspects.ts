@@ -58,7 +58,7 @@ function getAspectsFromDimension(
 function getAspectsFromDimensions(
   columns: DatatableColumn[],
   dimensions: Dimension[] | undefined = []
-): Aspect[] | undefined {
+): Aspect[] {
   return compact(dimensions.map((d) => getAspectsFromDimension(columns, d)));
 }
 
