@@ -35,9 +35,9 @@ export function getAspects(
 
   return {
     x: getAspectsFromDimension(columns, x) ?? getEmptyAspect(),
-    y: getAspectsFromDimension(columns, y) ?? [],
+    y: getAspectsFromDimensions(columns, y) ?? [],
     z: z && z?.length > 0 ? getAspectsFromDimension(columns, z[0]) : undefined,
-    series: getAspectsFromDimension(columns, seriesDimensions),
+    series: getAspectsFromDimensions(columns, seriesDimensions),
     splitColumn: splitColumn?.length ? getAspectsFromDimension(columns, splitColumn[0]) : undefined,
     splitRow: splitRow?.length ? getAspectsFromDimension(columns, splitRow[0]) : undefined,
   };
@@ -46,30 +46,20 @@ export function getAspects(
 function getAspectsFromDimension(
   columns: DatatableColumn[],
   dimension?: Dimension | null
-): Aspect | undefined;
-function getAspectsFromDimension(
-  columns: DatatableColumn[],
-  dimensions?: Dimension[] | null
-): Aspect[] | undefined;
-function getAspectsFromDimension(
-  columns: DatatableColumn[],
-  dimensions?: Dimension | Dimension[] | null
-): Aspect[] | Aspect | undefined {
-  if (!dimensions) {
+): Aspect | undefined {
+  if (!dimension) {
     return;
   }
 
-  if (Array.isArray(dimensions)) {
-    return compact(
-      dimensions.map((d) => {
-        const column = d && getColumnByAccessor(columns, d.accessor);
-        return column && getAspect(column, d);
-      })
-    );
-  }
+  const column = getColumnByAccessor(columns, dimension.accessor);
+  return column && getAspect(column, dimension);
+}
 
-  const column = getColumnByAccessor(columns, dimensions.accessor);
-  return column && getAspect(column, dimensions);
+function getAspectsFromDimensions(
+  columns: DatatableColumn[],
+  dimensions: Dimension[] | undefined = []
+): Aspect[] | undefined {
+  return compact(dimensions.map((d) => getAspectsFromDimension(columns, d)));
 }
 
 const getAspect = (
