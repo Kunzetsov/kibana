@@ -102,7 +102,6 @@ export type TooltipConfig = Omit<TooltipProps, 'customTooltip'> & {
 
 export interface VisConfig {
   legend: LegendOptions;
-  tooltip: TooltipConfig;
   xAxis: AxisConfig<XScaleType>;
   yAxes: Array<AxisConfig<YScaleType>>;
   aspects: Aspects;

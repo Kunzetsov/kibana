@@ -29,7 +29,7 @@ import {
 import { renderEndzoneTooltip } from '../../../../charts/public';
 
 import { getThemeService } from '../services';
-import { VisConfig } from '../../common/types';
+import { VisConfig, TooltipConfig } from '../../common/types';
 
 declare global {
   interface Window {
@@ -45,7 +45,6 @@ type XYSettingsProps = Pick<
   | 'markSizeRatio'
   | 'rotation'
   | 'enableHistogramMode'
-  | 'tooltip'
   | 'isTimeChart'
   | 'xAxis'
   | 'orderBucketsBySum'
@@ -62,6 +61,7 @@ type XYSettingsProps = Pick<
   legendPosition: Position;
   truncateLegend: boolean;
   maxLegendLines: number;
+  tooltip: TooltipConfig;
 };
 
 function getValueLabelsStyling() {

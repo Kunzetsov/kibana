@@ -23,7 +23,6 @@ import {
 } from '../../common/types';
 import { getThresholdLine } from './get_threshold_line';
 import { getRotation } from './get_rotation';
-import { getTooltip } from './get_tooltip';
 import { getLegend } from './get_legend';
 import { getAxis } from './get_axis';
 import { getAspects } from './get_aspects';
@@ -61,8 +60,6 @@ export function getConfig(table: Datatable, params: VisTypeXyConfig): VisConfig 
     aspects.x.format?.id === KBN_FIELD_TYPES.DATE
   );
 
-  const tooltip = getTooltip(aspects, params);
-
   return {
     // NOTE: downscale ratio to match current vislib implementation
     markSizeRatio: radiusRatio * 0.6,
@@ -75,7 +72,6 @@ export function getConfig(table: Datatable, params: VisTypeXyConfig): VisConfig 
     showCurrentTime: addTimeMarker && isTimeChart,
     showValueLabel: labels.show ?? false,
     enableHistogramMode,
-    tooltip,
     aspects,
     xAxis,
     yAxes,

@@ -42,13 +42,7 @@ export function getAxis<S extends XScaleType | YScaleType>(
     (isCategoryAxis || seriesParams.some(({ valueAxis: id }) => id === axis.id)) && axis.show;
   const groupId = axis.id;
 
-  const grid = isCategoryAxis
-    ? {
-        show: categoryLines,
-      }
-    : {
-        show: valueAxis === axis.id,
-      };
+  const grid = { show: isCategoryAxis ? categoryLines : valueAxis === axis.id };
 
   const tickFormatter: TickFormatter = (v) =>
     isSimpleField(format) || shouldApplyFormatter ? formatter?.(v) ?? v : v;

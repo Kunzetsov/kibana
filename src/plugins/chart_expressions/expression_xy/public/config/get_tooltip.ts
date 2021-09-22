@@ -8,12 +8,17 @@
 
 import { TooltipType } from '@elastic/charts';
 
-import { Aspects, VisTypeXyConfig, TooltipConfig } from '../../common/types';
+import { Aspects, TooltipConfig } from '../../common/types';
 import { getDetailedTooltip } from '../components/detailed_tooltip';
+
+interface TooltipDisplayConfig {
+  addTooltip?: boolean;
+  detailedTooltip?: boolean;
+}
 
 export function getTooltip(
   aspects: Aspects,
-  { addTooltip, detailedTooltip }: VisTypeXyConfig
+  { addTooltip, detailedTooltip }: TooltipDisplayConfig
 ): TooltipConfig {
   return {
     type: addTooltip ? TooltipType.VerticalCursor : TooltipType.None,

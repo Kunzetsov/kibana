@@ -10,10 +10,5 @@ import { Rotation } from '@elastic/charts';
 
 import { CategoryAxis } from '../../common/types';
 
-export function getRotation({ position }: CategoryAxis): Rotation {
-  if (position === 'left' || position === 'right') {
-    return 90;
-  }
-
-  return 0;
-}
+export const getRotation = ({ position }: CategoryAxis): Rotation =>
+  position === 'left' || position === 'right' ? 90 : 0;

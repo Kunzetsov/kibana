@@ -55,6 +55,7 @@ import {
 } from '../common/utils/accessors';
 import { ChartSplitter } from './chart_splitter';
 import { VisTypeXyConfig, XyVariables } from '../common/types';
+import { getTooltip } from './config/get_tooltip';
 
 export interface VisComponentProps {
   visParams: VisTypeXyConfig;
@@ -120,15 +121,17 @@ const VisComponent = (props: VisComponentProps) => {
     ): ElementClickListener => {
       const splitSeriesAccessorFnMap = getSplitSeriesAccessorFnMap(splitSeriesAccessors);
       return (elements) => {
-        if (xAccessor !== null) {
-          const event = getFilterFromChartClickEventFn(
-            visData,
-            xAccessor,
-            splitSeriesAccessorFnMap,
-            splitChartAccessor
-          )(elements as XYChartElementEvent[]);
-          props.fireEvent(event);
+        if (xAccessor === null) {
+          return;
         }
+
+        const event = getFilterFromChartClickEventFn(
+          visData,
+          xAccessor,
+          splitSeriesAccessorFnMap,
+          splitChartAccessor
+        )(elements as XYChartElementEvent[]);
+        props.fireEvent(event);
       };
     },
     [props]
@@ -158,11 +161,10 @@ const VisComponent = (props: VisComponentProps) => {
     ) => {
       const splitSeriesAccessorFnMap = getSplitSeriesAccessorFnMap(splitSeriesAccessors);
       return (series: XYChartSeriesIdentifier): ClickTriggerEvent | null => {
-        if (xAccessor !== null) {
-          return getFilterFromSeriesFn(visData)(series, splitSeriesAccessorFnMap);
+        if (xAccessor === null) {
+          return null;
         }
-
-        return null;
+        return getFilterFromSeriesFn(visData)(series, splitSeriesAccessorFnMap);
       };
     },
     []
@@ -215,6 +217,11 @@ const VisComponent = (props: VisComponentProps) => {
   const { visData, visParams, syncColors } = props;
 
   const config = getConfig(visData, visParams);
+  const tooltip = getTooltip(config.aspects, {
+    addTooltip: visParams.addTooltip,
+    detailedTooltip: visParams.detailedTooltip,
+  });
+
   const timeZone = getTimeZone();
 
   const xDomain =
@@ -359,6 +366,7 @@ const VisComponent = (props: VisComponentProps) => {
         />
         <XYSettings
           {...config}
+          tooltip={tooltip}
           truncateLegend={visParams.truncateLegend}
           maxLegendLines={visParams.maxLegendLines}
           showLegend={showLegend}
