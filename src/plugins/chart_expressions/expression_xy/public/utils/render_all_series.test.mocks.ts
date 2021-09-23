@@ -17,9 +17,6 @@ export const getVisConfig = (): VisConfig => {
     showCurrentTime: false,
     showValueLabel: false,
     enableHistogramMode: true,
-    tooltip: {
-      type: 'vertical',
-    },
     xDomain: {
       minInterval: 60000,
       adjusted: {
@@ -141,9 +138,6 @@ export const getVisConfigMutipleYaxis = (): VisConfig => {
     showCurrentTime: false,
     showValueLabel: false,
     enableHistogramMode: true,
-    tooltip: {
-      type: 'vertical',
-    },
     xDomain: {
       minInterval: 60000,
       adjusted: {
@@ -275,9 +269,6 @@ export const getVisConfigPercentiles = (): VisConfig => {
     showCurrentTime: false,
     showValueLabel: false,
     enableHistogramMode: true,
-    tooltip: {
-      type: 'vertical',
-    },
     xDomain: {
       minInterval: 60000,
       adjusted: {
