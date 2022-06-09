@@ -124,9 +124,14 @@ const selectedShapes = select(getSelectedShapes)(selectionStateFull);
 
 const selectedPrimaryShapeIds = select(getSelectedPrimaryShapeIds)(selectedShapes); // fixme unify with contentShape
 
-const symmetricManipulation = optionHeld; // as in comparable software applications, todo: make configurable
+const centeredSymManipulation = optionHeld; // as in comparable software applications, todo: make configurable
+const symmetricManipulation = shiftHeld; // as in comparable software applications, todo: make configurable
 
-const resizeManipulator = select(getResizeManipulator)(configuration, symmetricManipulation);
+const resizeManipulator = select(getResizeManipulator)(
+  configuration,
+  centeredSymManipulation,
+  symmetricManipulation
+);
 
 const directManipulationTransformIntents = select(getTransformIntents)(
   configuration,
@@ -185,7 +190,7 @@ const snappedShapes = select(getSnappedShapes)(
   draggedPrimaryShape,
   alignmentGuideAnnotations,
   alterSnapGesture,
-  symmetricManipulation
+  centeredSymManipulation
 );
 
 const constrainedShapesWithPreexistingAnnotations = select(

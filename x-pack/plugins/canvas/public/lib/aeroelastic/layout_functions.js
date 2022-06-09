@@ -335,6 +335,49 @@ const asymmetricResizeManipulation =
     };
   };
 
+const resizeWithSavingProportionsManipulation =
+  (config) =>
+  ({ gesture, shape, directShape }) => {
+    const transform = gesture.cumulativeTransform;
+    // scaling such that the center remains in place (ie. the other side of the shape can grow/shrink)
+    if (!shape || !directShape) {
+      return { transforms: [], shapes: [] };
+    }
+
+    // transform the incoming `transform` so that resizing is aligned with shape orientation
+    const composite = compositeComponent(shape.localTransformMatrix);
+    const inv = invert(composite); // rid the translate component
+    const vector = mvMultiply(multiply(inv, transform), ORIGIN);
+
+    const orientationMask = [
+      resizeMultiplierHorizontal[directShape.horizontalPosition] / 2,
+      resizeMultiplierVertical[directShape.verticalPosition] / 2,
+      0,
+    ];
+    const orientedVector = componentProduct2d(vector, orientationMask);
+    const cappedOrientedVector = minimumSize(config.minimumElementSize, shape, orientedVector);
+
+    const antiRotatedVector = mvMultiply(
+      multiply(
+        composite,
+        scale(
+          resizeMultiplierHorizontal[directShape.horizontalPosition],
+          resizeMultiplierVertical[directShape.verticalPosition],
+          1
+        ),
+        translate(cappedOrientedVector[0], cappedOrientedVector[1], 0)
+      ),
+      ORIGIN
+    );
+
+    const sizeMatrix = gesture.sizes || translate2d(...cappedOrientedVector);
+    return {
+      cumulativeTransforms: [translate(antiRotatedVector[0], antiRotatedVector[1], 0)],
+      cumulativeSizes: [sizeMatrix],
+      shapes: [shape.id],
+    };
+  };
+
 const directShapeTranslateManipulation = (cumulativeTransforms, directShapes) => {
   const shapes = directShapes
     .map((shape) => shape.type !== 'annotation' && shape.id)
@@ -386,6 +429,7 @@ const resizeAnnotationManipulation = (
       transformGestures.map((gesture) => ({ gesture, shape, directShape: directShapes[i] }))
     )
   );
+
   return tuples.map(manipulator);
 };
 
@@ -1372,7 +1416,14 @@ export const getSelectionStateFull = (
       boxHighlightedShapes: boxHighlightedShapes,
     };
   }
-  const selectFunction = config.singleSelect || !multiselect ? singleSelect : multiSelect;
+
+  const multipleShapesSelected =
+    selectedShapeObjects.filter(({ id }) => !hoveredShapes.some(({ parent }) => parent === id))
+      .length > 0;
+
+  const selectFunction =
+    config.singleSelect || !(multiselect && multipleShapesSelected) ? singleSelect : multiSelect;
+
   return selectFunction(
     prev,
     config,
@@ -1396,8 +1447,17 @@ export const getSelectionState = ({ uid, depthIndex, down, metaHeld, boxHighligh
 
 export const getSelectedPrimaryShapeIds = (shapes) => shapes.map(primaryShape);
 
-export const getResizeManipulator = (config, toggle) =>
-  (toggle ? centeredResizeManipulation : asymmetricResizeManipulation)(config);
+export const getResizeManipulator = (config, centeredResizing, symmetricResizing) => {
+  if (centeredResizing) {
+    return centeredResizeManipulation(config);
+  }
+
+  if (symmetricResizing) {
+    return resizeWithSavingProportionsManipulation(config);
+  }
+
+  return asymmetricResizeManipulation(config);
+};
 
 export const getTransformIntents = (
   config,
