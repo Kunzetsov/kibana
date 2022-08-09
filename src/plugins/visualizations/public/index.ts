@@ -30,9 +30,13 @@ export type {
   VisTypeDefinition,
   Schema,
   ISchemas,
+  BaseLayerContext,
   NavigateToLensContext,
-  VisualizeEditorLayersContext,
+  TsvbTimeseriesToLensXyConfig,
+  TsvbTimeseriesToLensXyLayerContext,
+  AggBasedTableToLensTableLayerContext,
 } from './vis_types';
+export { ConvertToLensVisTypes } from './vis_types';
 export type { Vis, SerializedVis, SerializedVisData, VisData } from './vis';
 export type VisualizeEmbeddableFactoryContract = PublicContract<VisualizeEmbeddableFactory>;
 export type VisualizeEmbeddableContract = PublicContract<VisualizeEmbeddable>;
@@ -44,7 +48,7 @@ export type {
   ISavedVis,
   VisSavedObject,
   VisToExpressionAst,
-  VisToExpressionAstParams,
+  AdditionalVisParams,
   VisEditorOptionsProps,
   GetVisOptions,
 } from './types';

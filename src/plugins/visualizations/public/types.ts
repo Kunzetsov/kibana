@@ -19,6 +19,7 @@ import { ExpressionAstExpression } from '@kbn/expressions-plugin/public';
 import type { Vis } from './vis';
 import type { PersistedState } from './persisted_state';
 import type { VisParams, SerializedVis } from '../common';
+import { NavigateToLensContext } from './vis_types';
 
 export type { Vis, SerializedVis, VisParams };
 export interface SavedVisState {
@@ -72,7 +73,7 @@ export interface GetVisOptions {
   indexPattern?: string;
 }
 
-export interface VisToExpressionAstParams {
+export interface AdditionalVisParams {
   timefilter: TimefilterContract;
   timeRange?: any;
   abortSignal?: AbortSignal;
@@ -80,8 +81,13 @@ export interface VisToExpressionAstParams {
 
 export type VisToExpressionAst<TVisParams = VisParams> = (
   vis: Vis<TVisParams>,
-  params: VisToExpressionAstParams
+  params: AdditionalVisParams
 ) => Promise<ExpressionAstExpression> | ExpressionAstExpression;
+
+export type NavigateToLens<TVisParams = VisParams, Layer = {}, Configuration = {}> = (
+  vis: Vis<TVisParams>,
+  params: AdditionalVisParams
+) => Promise<NavigateToLensContext<Layer, Configuration> | null> | undefined;
 
 export interface VisEditorOptionsProps<VisParamType = unknown> {
   aggs: IAggConfigs;

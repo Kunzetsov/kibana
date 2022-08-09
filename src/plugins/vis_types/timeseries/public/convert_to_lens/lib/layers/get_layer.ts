@@ -6,7 +6,10 @@
  * Side Public License, v 1.
  */
 
-import { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import {
+  ConvertToLensVisTypes,
+  TsvbTimeseriesToLensXyLayerContext,
+} from '@kbn/visualizations-plugin/public';
 import { PaletteOutput } from '@kbn/coloring';
 import { SUPPORTED_FORMATTERS } from '../formatters';
 import { convertSplitFilters } from '../split_chart';
@@ -43,7 +46,7 @@ export const getLayerConfiguration = (
   splitFields: string[],
   timeField?: string,
   splitWithDateHistogram?: boolean
-): VisualizeEditorLayersContext => {
+): TsvbTimeseriesToLensXyLayerContext => {
   const layer = model.series[layerIdx];
   const palette = layer.palette as PaletteOutput;
   const splitFilters = convertSplitFilters(layer);
@@ -52,6 +55,7 @@ export const getLayerConfiguration = (
   const metrics = convertMetrics(layer, metricsArray, filter);
   return {
     indexPatternId,
+    fromVisType: ConvertToLensVisTypes.TIMESERIES,
     timeFieldName: timeField,
     chartType,
     axisPosition: layer.separate_axis ? layer.axis_position : model.axis_position,

@@ -5,26 +5,21 @@
  * 2.0.
  */
 
-import { flatten, minBy, pick, mapValues, partition } from 'lodash';
+import { flatten, minBy, partition } from 'lodash';
 import { i18n } from '@kbn/i18n';
-import type { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import { BaseLayerContext } from '@kbn/visualizations-plugin/public';
 import { generateId } from '../id_generator';
-import type { DatasourceSuggestion, TableChangeType } from '../types';
-import { columnToOperation } from './indexpattern';
+import type { DatasourceSuggestion } from '../types';
 import {
   insertNewColumn,
   replaceColumn,
   getMetricOperationTypes,
   getOperationTypesForField,
   operationDefinitionMap,
-  BaseIndexPatternColumn,
   OperationType,
   getExistingColumnGroups,
   isReferenced,
   getReferencedColumnIds,
-  getSplitByTermsLayer,
-  getSplitByFiltersLayer,
-  computeLayerFromContext,
   hasTermsWithManyBuckets,
 } from './operations';
 import { hasField } from './pure_utils';
@@ -35,66 +30,10 @@ import type {
   IndexPatternField,
 } from './types';
 import { documentField } from './document_field';
+import { buildSuggestion } from './suggestion';
+import { getVisSuggestions } from './vis_suggestions';
+
 export type IndexPatternSuggestion = DatasourceSuggestion<IndexPatternPrivateState>;
-
-function buildSuggestion({
-  state,
-  updatedLayer,
-  layerId,
-  label,
-  changeType,
-}: {
-  state: IndexPatternPrivateState;
-  layerId: string;
-  changeType: TableChangeType;
-  updatedLayer?: IndexPatternLayer;
-  label?: string;
-}): DatasourceSuggestion<IndexPatternPrivateState> {
-  const updatedState = updatedLayer
-    ? {
-        ...state,
-        layers: {
-          ...state.layers,
-          [layerId]: updatedLayer,
-        },
-      }
-    : state;
-
-  // It's fairly easy to accidentally introduce a mismatch between
-  // columnOrder and columns, so this is a safeguard to ensure the
-  // two match up.
-  const layers = mapValues(updatedState.layers, (layer) => ({
-    ...layer,
-    columns: pick(layer.columns, layer.columnOrder) as Record<string, BaseIndexPatternColumn>,
-  }));
-
-  const columnOrder = layers[layerId].columnOrder;
-  const columnMap = layers[layerId].columns as Record<string, BaseIndexPatternColumn>;
-  const isMultiRow = Object.values(columnMap).some((column) => column.isBucketed);
-
-  return {
-    state: {
-      ...updatedState,
-      layers,
-    },
-
-    table: {
-      columns: columnOrder
-        // Hide any referenced columns from what visualizations know about
-        .filter((columnId) => !isReferenced(layers[layerId]!, columnId))
-        .map((columnId) => ({
-          columnId,
-          operation: columnToOperation(columnMap[columnId]),
-        })),
-      isMultiRow,
-      layerId,
-      changeType,
-      label,
-    },
-
-    keptLayerIds: Object.keys(state.layers),
-  };
-}
 
 export function getDatasourceSuggestionsForField(
   state: IndexPatternPrivateState,
@@ -135,93 +74,14 @@ export function getDatasourceSuggestionsForField(
 // Called when the user navigates from Visualize editor to Lens
 export function getDatasourceSuggestionsForVisualizeCharts(
   state: IndexPatternPrivateState,
-  context: VisualizeEditorLayersContext[]
+  context: BaseLayerContext[]
 ): IndexPatternSuggestion[] {
   const layers = Object.keys(state.layers);
   const layerIds = layers.filter(
     (id) => state.layers[id].indexPatternId === context[0].indexPatternId
   );
   if (layerIds.length !== 0) return [];
-  return getEmptyLayersSuggestionsForVisualizeCharts(state, context);
-}
-
-function getEmptyLayersSuggestionsForVisualizeCharts(
-  state: IndexPatternPrivateState,
-  context: VisualizeEditorLayersContext[]
-): IndexPatternSuggestion[] {
-  const suggestions: IndexPatternSuggestion[] = [];
-  for (let layerIdx = 0; layerIdx < context.length; layerIdx++) {
-    const layer = context[layerIdx];
-    const indexPattern = state.indexPatterns[layer.indexPatternId];
-    if (!indexPattern) return [];
-
-    const newId = generateId();
-    let newLayer: IndexPatternLayer | undefined;
-    if (indexPattern.timeFieldName) {
-      newLayer = createNewTimeseriesLayerWithMetricAggregationFromVizEditor(indexPattern, layer);
-    }
-    if (newLayer) {
-      const suggestion = buildSuggestion({
-        state,
-        updatedLayer: newLayer,
-        layerId: newId,
-        changeType: 'initial',
-      });
-      const layerId = Object.keys(suggestion.state.layers)[0];
-      context[layerIdx].layerId = layerId;
-      suggestions.push(suggestion);
-    }
-  }
-  return suggestions;
-}
-
-function createNewTimeseriesLayerWithMetricAggregationFromVizEditor(
-  indexPattern: IndexPattern,
-  layer: VisualizeEditorLayersContext
-): IndexPatternLayer | undefined {
-  const { timeFieldName, splitMode, splitFilters, metrics, timeInterval, dropPartialBuckets } =
-    layer;
-  const dateField = indexPattern.getFieldByName(timeFieldName!);
-
-  const splitFields = layer.splitFields
-    ? (layer.splitFields
-        .map((item) => indexPattern.getFieldByName(item))
-        .filter(Boolean) as IndexPatternField[])
-    : null;
-
-  // generate the layer for split by terms
-  if (splitMode === 'terms' && splitFields?.length) {
-    return getSplitByTermsLayer(indexPattern, splitFields, dateField, layer);
-    // generate the layer for split by filters
-  } else if (splitMode?.includes('filter') && splitFilters && splitFilters.length) {
-    return getSplitByFiltersLayer(indexPattern, dateField, layer);
-  } else {
-    const copyMetricsArray = [...metrics];
-    const computedLayer = computeLayerFromContext(
-      metrics.length === 1,
-      copyMetricsArray,
-      indexPattern,
-      layer.format,
-      layer.label
-    );
-    // static values layers do not need a date histogram column
-    if (Object.values(computedLayer.columns)[0].isStaticValue) {
-      return computedLayer;
-    }
-
-    return insertNewColumn({
-      op: 'date_histogram',
-      layer: computedLayer,
-      columnId: generateId(),
-      field: dateField,
-      indexPattern,
-      visualizationGroups: [],
-      columnParams: {
-        interval: timeInterval,
-        dropPartials: dropPartialBuckets,
-      },
-    });
-  }
+  return getVisSuggestions(state, context);
 }
 
 // Called when the user navigates from Discover to Lens (Visualize button)

@@ -5,7 +5,7 @@
  * in compliance with, at your election, the Elastic License 2.0 or the Server
  * Side Public License, v 1.
  */
-import type { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import type { TsvbTimeseriesToLensXyLayerContext } from '@kbn/visualizations-plugin/public';
 import type { Metric } from '../../../../common/types';
 import { getSeriesAgg } from './get_series_agg';
 import {
@@ -24,7 +24,7 @@ import {
 } from '../metrics';
 
 export interface VisSeries {
-  metrics: VisualizeEditorLayersContext['metrics'];
+  metrics: TsvbTimeseriesToLensXyLayerContext['metrics'];
   seriesAgg?: string;
 }
 
@@ -37,7 +37,7 @@ export const getSeries = (initialMetrics: Metric[], totalSeriesNum: number): Vis
   if (!aggregationMap) {
     return null;
   }
-  let metricsArray: VisualizeEditorLayersContext['metrics'] = [];
+  let metricsArray: TsvbTimeseriesToLensXyLayerContext['metrics'] = [];
   switch (aggregation) {
     case 'percentile': {
       const percentiles = metrics[metricIdx].percentiles;
@@ -45,7 +45,7 @@ export const getSeries = (initialMetrics: Metric[], totalSeriesNum: number): Vis
         const percentilesSeries = getPercentilesSeries(
           percentiles,
           fieldName
-        ) as VisualizeEditorLayersContext['metrics'];
+        ) as TsvbTimeseriesToLensXyLayerContext['metrics'];
         metricsArray = [...metricsArray, ...percentilesSeries];
       }
       break;
@@ -58,7 +58,7 @@ export const getSeries = (initialMetrics: Metric[], totalSeriesNum: number): Vis
           values,
           colors,
           fieldName
-        ) as VisualizeEditorLayersContext['metrics'];
+        ) as TsvbTimeseriesToLensXyLayerContext['metrics'];
         metricsArray = [...metricsArray, ...percentileRanksSeries];
       }
       break;
@@ -114,7 +114,7 @@ export const getSeries = (initialMetrics: Metric[], totalSeriesNum: number): Vis
         aggregation,
         metricIdx,
         metrics
-      ) as VisualizeEditorLayersContext['metrics'];
+      ) as TsvbTimeseriesToLensXyLayerContext['metrics'];
       break;
     }
     case 'cumulative_sum': {
@@ -158,7 +158,7 @@ export const getSeries = (initialMetrics: Metric[], totalSeriesNum: number): Vis
       if (!formula) {
         return null;
       }
-      metricsArray = getFormulaSeries(formula) as VisualizeEditorLayersContext['metrics'];
+      metricsArray = getFormulaSeries(formula) as TsvbTimeseriesToLensXyLayerContext['metrics'];
       break;
     }
     case 'avg_bucket':
@@ -169,7 +169,7 @@ export const getSeries = (initialMetrics: Metric[], totalSeriesNum: number): Vis
       if (!formula) {
         return null;
       }
-      metricsArray = getFormulaSeries(formula) as VisualizeEditorLayersContext['metrics'];
+      metricsArray = getFormulaSeries(formula) as TsvbTimeseriesToLensXyLayerContext['metrics'];
       break;
     }
     case 'filter_ratio': {

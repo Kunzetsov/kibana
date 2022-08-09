@@ -14,6 +14,10 @@ export type {
   VisTypeDefinition,
   ISchemas,
   Schema,
+  BaseLayerContext,
   NavigateToLensContext,
-  VisualizeEditorLayersContext,
+  TsvbTimeseriesToLensXyConfig,
+  TsvbTimeseriesToLensXyLayerContext,
+  AggBasedTableToLensTableLayerContext,
 } from './types';
+export { ConvertToLensVisTypes } from './constants';

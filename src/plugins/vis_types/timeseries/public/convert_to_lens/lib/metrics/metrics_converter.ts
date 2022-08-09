@@ -6,7 +6,7 @@
  * Side Public License, v 1.
  */
 
-import { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import { TsvbTimeseriesToLensXyLayerContext } from '@kbn/visualizations-plugin/public';
 import { Series } from '../../../../common/types';
 import { Filter } from '../../types';
 
@@ -26,7 +26,7 @@ export const convertFilter = (series: Series): Filter | void => {
 
 const convertMetric = (
   series: Series,
-  metric: VisualizeEditorLayersContext['metrics'][number],
+  metric: TsvbTimeseriesToLensXyLayerContext['metrics'][number],
   filter: Filter | void
 ) => ({
   ...metric,
@@ -40,6 +40,6 @@ const convertMetric = (
 
 export const convertMetrics = (
   series: Series,
-  metrics: VisualizeEditorLayersContext['metrics'],
+  metrics: TsvbTimeseriesToLensXyLayerContext['metrics'],
   filter: Filter | void
 ) => metrics.map((metric) => convertMetric(series, metric, filter));

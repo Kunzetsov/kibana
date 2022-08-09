@@ -21,7 +21,11 @@ import { createDatatableUtilitiesMock } from '@kbn/data-plugin/common/mocks';
 import { layerTypes } from '../../../common';
 import { createMockDatasource, createMockFramePublicAPI } from '../../mocks';
 import { LensIconChartBar } from '../../assets/chart_bar';
-import type { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import type {
+  TsvbTimeseriesToLensXyConfig,
+  TsvbTimeseriesToLensXyLayerContext,
+} from '@kbn/visualizations-plugin/public';
+
 import { chartPluginMock } from '@kbn/charts-plugin/public/mocks';
 import { fieldFormatsServiceMock } from '@kbn/field-formats-plugin/public/mocks';
 import { Datatable } from '@kbn/expressions-plugin/common';
@@ -744,7 +748,7 @@ describe('xy_visualization', () => {
   describe('#updateLayersConfigurationFromContext', () => {
     let mockDatasource: ReturnType<typeof createMockDatasource>;
     let frame: ReturnType<typeof createMockFramePublicAPI>;
-    let context: VisualizeEditorLayersContext;
+    let context: TsvbTimeseriesToLensXyLayerContext;
 
     beforeEach(() => {
       frame = createMockFramePublicAPI();
@@ -787,7 +791,7 @@ describe('xy_visualization', () => {
         ],
         timeInterval: 'auto',
         format: 'bytes',
-      } as VisualizeEditorLayersContext;
+      } as TsvbTimeseriesToLensXyLayerContext;
     });
 
     it('sets the context configuration correctly', () => {
@@ -868,7 +872,10 @@ describe('xy_visualization', () => {
   });
 
   describe('#getVisualizationSuggestionFromContext', () => {
-    let context: VisualizeEditorContext;
+    let context: VisualizeEditorContext<
+      TsvbTimeseriesToLensXyLayerContext,
+      TsvbTimeseriesToLensXyConfig
+    >;
     let suggestions: Suggestion[];
 
     beforeEach(() => {
@@ -960,6 +967,7 @@ describe('xy_visualization', () => {
         layers: [
           {
             indexPatternId: 'ff959d40-b880-11e8-a6d9-e546fe2bba5f',
+            fromVisType: 'timeseries',
             timeFieldName: 'order_date',
             chartType: 'area',
             axisPosition: 'left',
@@ -986,7 +994,7 @@ describe('xy_visualization', () => {
             isVisible: true,
             position: 'right',
             shouldTruncate: true,
-            maxLines: true,
+            maxLines: 5,
           },
           gridLinesVisibility: {
             x: true,
@@ -1003,7 +1011,7 @@ describe('xy_visualization', () => {
           },
         },
         isVisualizeAction: true,
-      } as VisualizeEditorContext;
+      };
     });
 
     it('updates the visualization state correctly based on the context', () => {

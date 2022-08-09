@@ -28,12 +28,12 @@ const getConvertFnByType = (
  * Returns the Lens model, only if it is supported. If not, it returns null.
  * In case of null, the menu item is disabled and the user can't navigate to Lens.
  */
-export const convertTSVBtoLensConfiguration = async (model: Panel) => {
+export const convertTSVBtoLensConfiguration = async (params: Panel) => {
   // Disables the option for not timeseries charts, for the string mode and for series with annotations
-  if (!model.use_kibana_indexes || (model.annotations && model.annotations.length > 0)) {
+  if (!params.use_kibana_indexes || (params.annotations && params.annotations.length > 0)) {
     return null;
   }
-  const convertFn = await getConvertFnByType(model.type);
+  const convertFn = await getConvertFnByType(params.type);
 
-  return (await convertFn?.(model)) ?? null;
+  return (await convertFn?.(params)) ?? null;
 };

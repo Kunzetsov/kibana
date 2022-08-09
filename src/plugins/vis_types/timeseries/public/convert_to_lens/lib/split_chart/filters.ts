@@ -6,12 +6,12 @@
  * Side Public License, v 1.
  */
 
-import { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import { TsvbTimeseriesToLensXyLayerContext } from '@kbn/visualizations-plugin/public';
 import { Series } from '../../../../common/types';
 
 export const convertSplitFilters = (
   series: Series
-): Exclude<VisualizeEditorLayersContext['splitFilters'], undefined> => {
+): Exclude<TsvbTimeseriesToLensXyLayerContext['splitFilters'], undefined> => {
   const splitFilters = [];
   if (series.split_mode === 'filter' && series.filter) {
     splitFilters.push({ filter: series.filter });

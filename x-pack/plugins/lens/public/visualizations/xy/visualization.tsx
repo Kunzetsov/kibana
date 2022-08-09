@@ -22,7 +22,12 @@ import { getSuggestions } from './xy_suggestions';
 import { XyToolbar } from './xy_config_panel';
 import { DimensionEditor } from './xy_config_panel/dimension_editor';
 import { LayerHeader } from './xy_config_panel/layer_header';
-import type { Visualization, AccessorConfig, FramePublicAPI } from '../../types';
+import type {
+  Visualization,
+  AccessorConfig,
+  FramePublicAPI,
+  ConvertTsvbTimeseriesToLensContext,
+} from '../../types';
 import {
   State,
   visualizationTypes,
@@ -92,7 +97,7 @@ export const getXyVisualization = ({
   fieldFormats: FieldFormatsStart;
   useLegacyTimeAxis: boolean;
   kibanaTheme: ThemeServiceStart;
-}): Visualization<State> => ({
+}): Visualization<State, ConvertTsvbTimeseriesToLensContext> => ({
   id: 'lnsXY',
   visualizationTypes,
   getVisualizationTypeId(state) {

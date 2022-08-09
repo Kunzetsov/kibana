@@ -6,7 +6,7 @@
  * Side Public License, v 1.
  */
 
-import { Vis, VisToExpressionAstParams } from '@kbn/visualizations-plugin/public';
+import { Vis, AdditionalVisParams } from '@kbn/visualizations-plugin/public';
 import { toExpressionAst } from './to_ast';
 import { TagCloudVisParams } from './types';
 
@@ -49,7 +49,7 @@ describe('tagcloud vis toExpressionAst function', () => {
   });
 
   it('should match snapshot without params', () => {
-    const actual = toExpressionAst(vis, {} as VisToExpressionAstParams);
+    const actual = toExpressionAst(vis, {} as AdditionalVisParams);
     expect(actual).toMatchSnapshot();
   });
 
@@ -75,7 +75,7 @@ describe('tagcloud vis toExpressionAst function', () => {
         },
       },
     };
-    const actual = toExpressionAst(vis, {} as VisToExpressionAstParams);
+    const actual = toExpressionAst(vis, {} as AdditionalVisParams);
     expect(actual).toMatchSnapshot();
   });
 
@@ -105,7 +105,7 @@ describe('tagcloud vis toExpressionAst function', () => {
         },
       },
     };
-    const actual = toExpressionAst(vis, {} as VisToExpressionAstParams);
+    const actual = toExpressionAst(vis, {} as AdditionalVisParams);
     expect(actual).toMatchSnapshot();
   });
 });

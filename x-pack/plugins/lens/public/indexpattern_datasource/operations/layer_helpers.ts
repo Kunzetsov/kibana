@@ -9,7 +9,7 @@ import { partition, mapValues, pickBy, isArray } from 'lodash';
 import { CoreStart } from '@kbn/core/public';
 import type { Query } from '@kbn/es-query';
 import memoizeOne from 'memoize-one';
-import type { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import type { TsvbTimeseriesToLensXyLayerContext } from '@kbn/visualizations-plugin/public';
 import type {
   DatasourceFixAction,
   FrameDatasourceAPI,
@@ -1623,7 +1623,7 @@ export function getManagedColumnsFrom(
 
 export function computeLayerFromContext(
   isLast: boolean,
-  metricsArray: VisualizeEditorLayersContext['metrics'],
+  metricsArray: TsvbTimeseriesToLensXyLayerContext['metrics'],
   indexPattern: IndexPattern,
   format?: string,
   customLabel?: string
@@ -1736,7 +1736,7 @@ export function getSplitByTermsLayer(
   indexPattern: IndexPattern,
   splitFields: IndexPatternField[],
   dateField: IndexPatternField | undefined,
-  layer: VisualizeEditorLayersContext
+  layer: TsvbTimeseriesToLensXyLayerContext
 ): IndexPatternLayer {
   const { termsParams, metrics, timeInterval, splitWithDateHistogram, dropPartialBuckets } = layer;
   const copyMetricsArray = [...metrics];
@@ -1817,7 +1817,7 @@ export function getSplitByTermsLayer(
 export function getSplitByFiltersLayer(
   indexPattern: IndexPattern,
   dateField: IndexPatternField | undefined,
-  layer: VisualizeEditorLayersContext
+  layer: TsvbTimeseriesToLensXyLayerContext
 ): IndexPatternLayer {
   const { splitFilters, metrics, timeInterval, dropPartialBuckets } = layer;
   const filterParams = splitFilters?.map((param) => {

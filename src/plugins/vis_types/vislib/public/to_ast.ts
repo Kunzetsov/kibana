@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import {
   Vis,
-  VisToExpressionAstParams,
+  AdditionalVisParams,
   getVisSchemas,
   VisParams,
 } from '@kbn/visualizations-plugin/public';
@@ -25,7 +25,7 @@ import { BasicVislibParams, VislibChartType } from './types';
 
 export const toExpressionAst = async <TVisParams extends VisParams>(
   vis: Vis<TVisParams>,
-  params: VisToExpressionAstParams
+  params: AdditionalVisParams
 ) => {
   const schemas = getVisSchemas(vis, params);
   const dimensions: Dimensions = {

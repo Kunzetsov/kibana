@@ -516,12 +516,8 @@ describe('loader', () => {
         initialContext: {
           layers: [
             {
+              fromVisType: 'timeseries',
               indexPatternId: '1',
-              timeFieldName: 'timestamp',
-              chartType: 'area',
-              axisPosition: 'left',
-              metrics: [],
-              timeInterval: 'auto',
             },
           ],
           type: 'lnsXY',

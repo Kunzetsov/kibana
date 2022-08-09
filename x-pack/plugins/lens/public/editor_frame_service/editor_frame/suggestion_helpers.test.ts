@@ -15,6 +15,7 @@ import {
   VisualizeEditorContext,
 } from '../../types';
 import { DatasourceStates } from '../../state_management';
+import { TsvbTimeseriesToLensXyLayerContext } from '@kbn/visualizations-plugin/public';
 
 const generateSuggestion = (state = {}, layerId: string = 'first'): DatasourceSuggestion => ({
   state,
@@ -311,7 +312,7 @@ describe('suggestion helpers', () => {
         },
       },
       isVisualizeAction: true,
-    } as VisualizeEditorContext;
+    } as VisualizeEditorContext<TsvbTimeseriesToLensXyLayerContext>;
 
     getSuggestions({
       visualizationMap,
@@ -390,7 +391,7 @@ describe('suggestion helpers', () => {
         },
       },
       isVisualizeAction: true,
-    } as VisualizeEditorContext;
+    } as VisualizeEditorContext<TsvbTimeseriesToLensXyLayerContext>;
 
     const visualizationMap = {
       testVis: createMockVisualization(),

@@ -17,7 +17,11 @@ import type {
   IInterpreterRenderHandlers,
   Datatable,
 } from '@kbn/expressions-plugin/public';
-import type { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import type {
+  BaseLayerContext,
+  TsvbTimeseriesToLensXyConfig,
+  TsvbTimeseriesToLensXyLayerContext,
+} from '@kbn/visualizations-plugin/public';
 import type { Query } from '@kbn/es-query';
 import type {
   UiActionsStart,
@@ -68,8 +72,8 @@ export interface EditorFrameSetup {
   registerDatasource: <T, P>(
     datasource: Datasource<T, P> | (() => Promise<Datasource<T, P>>)
   ) => void;
-  registerVisualization: <T>(
-    visualization: Visualization<T> | (() => Promise<Visualization<T>>)
+  registerVisualization: <T, C>(
+    visualization: Visualization<T, C> | (() => Promise<Visualization<T, C>>)
   ) => void;
 }
 
@@ -168,15 +172,12 @@ export interface InitializationOptions {
   isFullEditor?: boolean;
 }
 
-interface AxisExtents {
-  mode: string;
-  lowerBound?: number;
-  upperBound?: number;
-}
-
-export interface VisualizeEditorContext {
-  layers: VisualizeEditorLayersContext[];
-  configuration: ChartSettings;
+export interface VisualizeEditorContext<
+  VisEditorContextLayer = BaseLayerContext,
+  VisEditorContextConfig = unknown
+> {
+  layers: VisEditorContextLayer[];
+  configuration: VisEditorContextConfig;
   savedObjectId?: string;
   embeddableId?: string;
   vizEditorOriginatingAppUrl?: string;
@@ -185,15 +186,10 @@ export interface VisualizeEditorContext {
   type: string;
 }
 
-interface ChartSettings {
-  fill?: string;
-  legend?: Record<string, boolean | string>;
-  gridLinesVisibility?: Record<string, boolean>;
-  extents?: {
-    yLeftExtent: AxisExtents;
-    yRightExtent: AxisExtents;
-  };
-}
+export type ConvertTsvbTimeseriesToLensContext = VisualizeEditorContext<
+  TsvbTimeseriesToLensXyLayerContext,
+  TsvbTimeseriesToLensXyConfig
+>;
 
 export interface GetDropPropsArgs<T = unknown> {
   state: T;
@@ -295,7 +291,7 @@ export interface Datasource<T = unknown, P = unknown> {
   ) => Array<DatasourceSuggestion<T>>;
   getDatasourceSuggestionsForVisualizeCharts: (
     state: T,
-    context: VisualizeEditorLayersContext[]
+    context: BaseLayerContext[]
   ) => Array<DatasourceSuggestion<T>>;
   getDatasourceSuggestionsForVisualizeField: (
     state: T,
@@ -646,12 +642,12 @@ export interface Suggestion {
 interface VisualizationConfigurationFromContextChangeProps<T> {
   layerId: string;
   prevState: T;
-  context: VisualizeEditorLayersContext;
+  context: TsvbTimeseriesToLensXyLayerContext;
 }
 
-interface VisualizationStateFromContextChangeProps {
+interface VisualizationStateFromContextChangeProps<ConvertToLensContext> {
   suggestions: Suggestion[];
-  context: VisualizeEditorContext;
+  context: ConvertToLensContext;
 }
 
 /**
@@ -776,7 +772,7 @@ export interface VisualizationDisplayOptions {
   noPadding?: boolean;
 }
 
-export interface Visualization<T = unknown> {
+export interface Visualization<T = unknown, ConvertToLensContext = unknown> {
   /** Plugin ID, such as "lnsXY" */
   id: string;
 
@@ -899,7 +895,7 @@ export interface Visualization<T = unknown> {
    * Update the visualization state from the context.
    */
   getVisualizationSuggestionFromContext?: (
-    props: VisualizationStateFromContextChangeProps
+    props: VisualizationStateFromContextChangeProps<ConvertToLensContext>
   ) => Suggestion;
   /**
    * Additional editor that gets rendered inside the dimension popover.

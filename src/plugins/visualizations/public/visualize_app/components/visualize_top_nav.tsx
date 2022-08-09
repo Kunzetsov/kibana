@@ -22,6 +22,7 @@ import type {
 import { VISUALIZE_APP_NAME } from '../../../common/constants';
 import { getTopNavConfig, isFallbackDataView } from '../utils';
 import type { NavigateToLensContext } from '../..';
+import { getTimeFilter } from '../../services';
 
 const LOCAL_STORAGE_EDIT_IN_LENS_BADGE = 'EDIT_IN_LENS_BADGE_VISIBLE';
 
@@ -99,12 +100,16 @@ const TopNav = ({
   useEffect(() => {
     const asyncGetTriggerContext = async () => {
       if (vis.type.navigateToLens) {
-        const triggerConfig = await vis.type.navigateToLens(vis.params);
+        const timefilter = getTimeFilter();
+        const triggerConfig = await vis.type.navigateToLens(vis, {
+          timefilter,
+          timeRange: timefilter.getTime(),
+        });
         setEditInLensConfig(triggerConfig);
       }
     };
     asyncGetTriggerContext();
-  }, [vis.params, vis.type]);
+  }, [vis]);
 
   const displayEditInLensItem = Boolean(vis.type.navigateToLens && editInLensConfig);
   const config = useMemo(() => {

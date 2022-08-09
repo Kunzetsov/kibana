@@ -13,8 +13,16 @@ import type { Adapters } from '@kbn/inspector-plugin/common';
 import type { Query } from '@kbn/es-query';
 import type { AggGroupNames, AggParam, AggGroupName } from '@kbn/data-plugin/public';
 import type { DataView } from '@kbn/data-views-plugin/public';
-import type { Vis, VisEditorOptionsProps, VisParams, VisToExpressionAst } from '../types';
+import { $Values } from '@kbn/utility-types';
+import type {
+  NavigateToLens,
+  Vis,
+  VisEditorOptionsProps,
+  VisParams,
+  VisToExpressionAst,
+} from '../types';
 import { VisGroups } from './vis_groups_enum';
+import { ConvertToLensVisTypes } from './constants';
 
 export interface VisTypeOptions {
   showTimePicker: boolean;
@@ -79,7 +87,7 @@ interface SplitByFilters {
   label?: string;
 }
 
-interface VisualizeEditorMetricContext {
+interface TsvbToLensXyMetric {
   agg: string;
   fieldName: string;
   pipelineAggType?: string;
@@ -89,8 +97,24 @@ interface VisualizeEditorMetricContext {
   accessor?: string;
 }
 
-export interface VisualizeEditorLayersContext {
+interface VisToLensMetric {
+  agg: string;
+  fieldName: string;
+  pipelineAggType?: string;
+  params?: Record<string, unknown>;
+  isFullReference: boolean;
+  color?: string;
+  accessor?: string;
+}
+
+export interface BaseLayerContext {
   indexPatternId: string;
+  fromVisType: $Values<typeof ConvertToLensVisTypes>;
+  layerId?: string;
+}
+
+export interface TsvbTimeseriesToLensXyLayerContext extends BaseLayerContext {
+  fromVisType: typeof ConvertToLensVisTypes.TIMESERIES;
   splitWithDateHistogram?: boolean;
   timeFieldName?: string;
   chartType?: string;
@@ -101,12 +125,21 @@ export interface VisualizeEditorLayersContext {
   collapseFn?: string;
   splitFilters?: SplitByFilters[];
   palette?: PaletteOutput;
-  metrics: VisualizeEditorMetricContext[];
+  metrics: TsvbToLensXyMetric[];
   timeInterval?: string;
   format?: string;
   label?: string;
-  layerId?: string;
   dropPartialBuckets?: boolean;
+}
+
+export interface AggBasedTableToLensTableLayerContext extends BaseLayerContext {
+  fromVisType: typeof ConvertToLensVisTypes.AGG_BASED_TABLE;
+  splitWithDateHistogram?: boolean;
+  timeFieldName?: string;
+  metrics: VisToLensMetric[];
+  buckets: VisToLensMetric[];
+  splitRows: VisToLensMetric[];
+  splitColumns: VisToLensMetric[];
 }
 
 interface AxisExtents {
@@ -115,37 +148,41 @@ interface AxisExtents {
   upperBound?: number;
 }
 
-export interface NavigateToLensContext {
-  layers: {
-    [key: string]: VisualizeEditorLayersContext;
+export interface TsvbTimeseriesToLensXyConfig {
+  fill: number | string;
+  legend: {
+    isVisible: boolean;
+    position: string;
+    shouldTruncate: boolean;
+    maxLines: number;
+    showSingleSeries?: boolean;
   };
+  gridLinesVisibility: {
+    x: boolean;
+    yLeft: boolean;
+    yRight: boolean;
+  };
+  extents: {
+    yLeftExtent: AxisExtents;
+    yRightExtent: AxisExtents;
+  };
+}
+
+export interface NavigateToLensContext<Layer = unknown, Configuration = unknown> {
+  layers: Record<string, Layer>;
   type: string;
-  configuration: {
-    fill: number | string;
-    legend: {
-      isVisible: boolean;
-      position: string;
-      shouldTruncate: boolean;
-      maxLines: number;
-      showSingleSeries: boolean;
-    };
-    gridLinesVisibility: {
-      x: boolean;
-      yLeft: boolean;
-      yRight: boolean;
-    };
-    extents: {
-      yLeftExtent: AxisExtents;
-      yRightExtent: AxisExtents;
-    };
-  };
+  configuration: Configuration;
 }
 
 /**
  * A visualization type definition representing a spec of one specific type of "classical"
  * visualizations (i.e. not Lens visualizations).
  */
-export interface VisTypeDefinition<TVisParams> {
+export interface VisTypeDefinition<
+  TVisParams,
+  NavigateToLensContextLayer = unknown,
+  NavigateToLensContextConfiguration = unknown
+> {
   /**
    * Visualization unique name
    */
@@ -172,9 +209,11 @@ export interface VisTypeDefinition<TVisParams> {
    * It receives the current visualization params as a parameter and should return the correct config
    * in order to be displayed in the Lens editor.
    */
-  readonly navigateToLens?: (
-    params?: VisParams
-  ) => Promise<NavigateToLensContext | null> | undefined;
+  readonly navigateToLens?: NavigateToLens<
+    TVisParams,
+    NavigateToLensContextLayer,
+    NavigateToLensContextConfiguration
+  >;
 
   /**
    * Some visualizations are created without SearchSource and may change the used indexes during the visualization configuration.

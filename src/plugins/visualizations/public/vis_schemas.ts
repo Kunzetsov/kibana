@@ -9,7 +9,7 @@
 import type { SerializedFieldFormat } from '@kbn/field-formats-plugin/common';
 import { IAggConfig, search } from '@kbn/data-plugin/public';
 
-import { Vis, VisToExpressionAstParams } from './types';
+import { Vis, AdditionalVisParams } from './types';
 
 const { isDateHistogramBucketAggConfig } = search.aggs;
 
@@ -24,6 +24,7 @@ export interface SchemaConfig {
   format: SerializedFieldFormat;
   params: SchemaConfigParams;
   aggType: string;
+  aggParams?: Record<string, any>;
 }
 
 export interface Schemas {
@@ -43,7 +44,8 @@ export interface Schemas {
 
 export const getVisSchemas = <TVisParams>(
   vis: Vis<TVisParams>,
-  { timeRange, timefilter }: VisToExpressionAstParams
+  { timeRange, timefilter }: AdditionalVisParams,
+  includeAggParams: boolean = false
 ): Schemas => {
   const createSchemaConfig = (accessor: number, agg: IAggConfig): SchemaConfig => {
     if (isDateHistogramBucketAggConfig(agg)) {
@@ -86,6 +88,7 @@ export const getVisSchemas = <TVisParams>(
       params,
       label,
       aggType: agg.type.name,
+      ...(includeAggParams ? { aggParams: agg.params } : {}),
     };
   };
 

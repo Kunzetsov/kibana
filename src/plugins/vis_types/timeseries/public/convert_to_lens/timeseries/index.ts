@@ -6,7 +6,7 @@
  * Side Public License, v 1.
  */
 
-import { VisualizeEditorLayersContext } from '@kbn/visualizations-plugin/public';
+import { TsvbTimeseriesToLensXyLayerContext } from '@kbn/visualizations-plugin/public';
 import { getDataViewsStart } from '../../services';
 import { getDataSourceInfo } from '../lib/datasource';
 import { getSeries } from '../lib/series';
@@ -17,7 +17,7 @@ import { getLayerConfiguration } from '../lib/layers';
 import { isSplitWithDateHistogram } from '../lib/split_chart';
 
 export const convertToLens: ConvertTsvbToLensVisualization = async (model) => {
-  const layersConfiguration: { [key: string]: VisualizeEditorLayersContext } = {};
+  const layersConfiguration: { [key: string]: TsvbTimeseriesToLensXyLayerContext } = {};
 
   // get the active series number
   const seriesNum = model.series.filter((series) => !series.hidden).length;

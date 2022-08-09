@@ -17,6 +17,10 @@ import {
   VisTypeDefinition,
 } from '@kbn/visualizations-plugin/public';
 import { RequestAdapter } from '@kbn/inspector-plugin/public';
+import {
+  TsvbTimeseriesToLensXyConfig,
+  TsvbTimeseriesToLensXyLayerContext,
+} from '@kbn/visualizations-plugin/public/vis_types/types';
 import { TSVB_EDITOR_NAME } from './application/editor_controller';
 import { PANEL_TYPES, TOOLTIP_MODES } from '../common/enums';
 import {
@@ -97,7 +101,9 @@ async function getUsedIndexPatterns(params: VisParams): Promise<DataView[]> {
 }
 
 export const metricsVisDefinition: VisTypeDefinition<
-  TimeseriesVisParams | TimeseriesVisDefaultParams
+  TimeseriesVisParams | TimeseriesVisDefaultParams,
+  TsvbTimeseriesToLensXyLayerContext,
+  TsvbTimeseriesToLensXyConfig
 > = {
   name: 'metrics',
   title: i18n.translate('visTypeTimeseries.kbnVisTypes.metricsTitle', { defaultMessage: 'TSVB' }),
@@ -168,8 +174,8 @@ export const metricsVisDefinition: VisTypeDefinition<
     }
     return [];
   },
-  navigateToLens: async (params?: VisParams) =>
-    params ? await convertTSVBtoLensConfiguration(params as Panel) : null,
+  navigateToLens: async (vis) =>
+    vis.params ? await convertTSVBtoLensConfiguration(vis.params) : null,
 
   inspectorAdapters: () => ({
     requests: new RequestAdapter(),

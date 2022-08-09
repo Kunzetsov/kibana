@@ -7,11 +7,18 @@
  */
 
 import { NavigateToLensContext } from '@kbn/visualizations-plugin/public';
+import {
+  TsvbTimeseriesToLensXyConfig,
+  TsvbTimeseriesToLensXyLayerContext,
+} from '@kbn/visualizations-plugin/public/vis_types/types';
 import type { Panel } from '../../common/types';
 
 export type ConvertTsvbToLensVisualization = (
   model: Panel
-) => Promise<NavigateToLensContext | null>;
+) => Promise<NavigateToLensContext<
+  TsvbTimeseriesToLensXyLayerContext,
+  TsvbTimeseriesToLensXyConfig
+> | null>;
 
 export interface Filter {
   kql?: string | { [key: string]: any } | undefined;
