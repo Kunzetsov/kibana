@@ -44,6 +44,7 @@ class PhrasesValuesInputUI extends PhraseSuggestorUI<PhrasesValuesInputProps> {
     return (
       <div ref={this.comboBoxRef}>
         <StringComboBox
+          className={this.props.className}
           fullWidth={fullWidth}
           compressed={compressed}
           placeholder={intl.formatMessage({

@@ -13,6 +13,7 @@ import type { Operator } from '../../filter_bar/filter_editor';
 import { getFieldValidityAndErrorMessage } from '../../filter_bar/filter_editor/lib';
 import { FiltersBuilderContextType } from '../context';
 import { ParamsEditorInput } from './params_editor_input';
+import { css } from '@emotion/css';
 
 interface ParamsEditorProps {
   dataView: DataView;
@@ -57,6 +58,11 @@ export function ParamsEditor({
     <EuiFormRow fullWidth isInvalid={isInvalid}>
       <EuiToolTip position="bottom" content={errorMessage ?? null} display="block">
         <ParamsEditorInput
+          className={css`
+            .euiFormControlLayout {
+              max-width: 100%;
+            }
+          `}
           field={field}
           params={params}
           operator={operator}

@@ -9,6 +9,7 @@
 import React, { useCallback, useContext } from 'react';
 import {
   EuiButtonEmpty,
+  EuiButtonIcon,
   EuiDraggable,
   EuiDroppable,
   EuiFlexGroup,
@@ -237,7 +238,7 @@ export function FilterItem({
                 gutterSize="xs"
                 responsive={false}
                 alignItems="center"
-                justifyContent="center"
+                justifyContent={'flexStart'}
                 data-test-subj={`filter-${path}`}
               >
                 <EuiFlexItem>
@@ -246,6 +247,7 @@ export function FilterItem({
                       responsive={false}
                       alignItems="center"
                       gutterSize="s"
+                      direction="row"
                       justifyContent="center"
                       className={cx({
                         [cursorOrCss]: dropTarget === path && !hideOr,
@@ -276,7 +278,11 @@ export function FilterItem({
                           justifyContent="center"
                           wrap
                         >
-                          <EuiFlexItem className={fieldAndParamCss}>
+                          <EuiFlexItem
+                            // className={fieldAndParamCss}
+                            grow={true}
+                            style={{ maxWidth: '50px' }}
+                          >
                             <EuiFormRow>
                               <FieldInput
                                 field={field}
@@ -285,7 +291,10 @@ export function FilterItem({
                               />
                             </EuiFormRow>
                           </EuiFlexItem>
-                          <EuiFlexItem className={operationCss}>
+                          <EuiFlexItem
+                            // className={operationCss}
+                            style={{ maxWidth: '50px' }}
+                          >
                             <EuiFormRow>
                               <OperatorInput
                                 field={field}
@@ -295,10 +304,15 @@ export function FilterItem({
                               />
                             </EuiFormRow>
                           </EuiFlexItem>
-                          <EuiFlexItem className={fieldAndParamCss}>
-                            <EuiFormRow>
+                          <EuiFlexItem
+                            className={fieldAndParamCss}
+                            grow={true}
+                            style={{ minWidth: 320, maxWidth: '100%' }}
+                          >
+                            <EuiFormRow style={{ maxWidth: '100%' }}>
                               <div data-test-subj="filterParams">
                                 <ParamsEditor
+                                  wrapperStyle={{ maxWidth: '100%' }}
                                   dataView={dataView}
                                   field={field}
                                   operator={operator}
@@ -313,7 +327,7 @@ export function FilterItem({
                         </EuiFlexGroup>
                       </EuiFlexItem>
                       <EuiFlexItem grow={false}>
-                        <EuiFlexGroup
+                        {/*   <EuiFlexGroup
                           justifyContent="flexEnd"
                           alignItems="flexEnd"
                           gutterSize="xs"
@@ -364,6 +378,22 @@ export function FilterItem({
                             >
                               {strings.getAddAndFilterGroupButtonLabel()}
                             </EuiButtonEmpty>
+                          </EuiFlexItem>
+                        </EuiFlexGroup>
+                          */}
+
+                        <EuiFlexGroup
+                          justifyContent="flexEnd"
+                          alignItems="flexEnd"
+                          gutterSize="xs"
+                          responsive={false}
+                        >
+                          <EuiFlexItem grow={false}>
+                            <EuiButtonIcon
+                              aria-label={'More actions'}
+                              color="text"
+                              iconType="boxesHorizontal"
+                            />
                           </EuiFlexItem>
                         </EuiFlexGroup>
                       </EuiFlexItem>

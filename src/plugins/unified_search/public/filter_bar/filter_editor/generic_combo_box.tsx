@@ -50,6 +50,7 @@ export function GenericComboBox<T>(props: GenericComboBoxProps<T>) {
 
   return (
     <EuiComboBox
+      style={props.style}
       options={euiOptions}
       selectedOptions={selectedEuiOptions}
       onChange={onComboBoxChange}

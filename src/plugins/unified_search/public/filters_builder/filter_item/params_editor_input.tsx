@@ -54,6 +54,7 @@ const getPlaceholderText = (isFieldSelected: boolean, isOperatorSelected: boolea
 };
 
 export function ParamsEditorInput({
+  className,
   dataView,
   field,
   operator,
@@ -79,6 +80,7 @@ export function ParamsEditorInput({
           fullWidth
           invalid={invalid}
           disabled={disabled}
+          className={className}
         />
       );
     case 'phrases':
@@ -93,6 +95,7 @@ export function ParamsEditorInput({
           timeRangeForSuggestionsOverride={timeRangeForSuggestionsOverride}
           fullWidth
           disabled={disabled}
+          className={className}
         />
       );
     case 'range':
@@ -104,6 +107,7 @@ export function ParamsEditorInput({
           onChange={onParamsChange}
           fullWidth
           disabled={disabled}
+          className={className}
         />
       );
       break;
@@ -115,6 +119,7 @@ export function ParamsEditorInput({
           disabled={true}
           placeholder={placeholderText}
           aria-label={placeholderText}
+          className={className}
         />
       );
   }
